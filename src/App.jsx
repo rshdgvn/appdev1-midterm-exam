@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
@@ -7,9 +7,6 @@ function App() {
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const ulRef = useRef(null);
-  const itemsRef = useRef([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,18 +75,27 @@ function App() {
   };
 
   const handleTestimonialClick = (index) => {
-    setActiveIndex(index);
-    if (ulRef.current && itemsRef.current[index]) {
-      ulRef.current.style.height = itemsRef.current[index].offsetHeight + "px";
+    setActiveTestimonial(index);
+
+    const listItems = document.querySelectorAll(".naccs ul li");
+    if (listItems[index]) {
+      const listItemHeight = listItems[index].offsetHeight;
+      const ul = document.querySelector(".naccs ul");
+      if (ul) {
+        ul.style.height = listItemHeight + "px";
+      }
     }
   };
 
   useEffect(() => {
-    if (ulRef.current && itemsRef.current[activeIndex]) {
-      ulRef.current.style.height =
-        itemsRef.current[activeIndex].offsetHeight + "px";
+    const firstItem = document.querySelector(".naccs ul li.active");
+    if (firstItem) {
+      const ul = document.querySelector(".naccs ul");
+      if (ul) {
+        ul.style.height = firstItem.offsetHeight + "px";
+      }
     }
-  }, [activeIndex]);
+  }, []);
 
   return (
     <>

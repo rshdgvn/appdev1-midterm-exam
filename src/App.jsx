@@ -1,60 +1,27 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalView, setModalView] = useState("social");
+
+  const openModal = (e) => {
+    e.preventDefault();
+    setIsModalOpen(true);
+    setModalView("social");
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalView("social");
+  };
 
   return (
     <>
-      <meta charSet="UTF-8" />
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, shrink-to-fit=no"
-      />
-      <meta name="description" content="" />
-      <meta name="author" content="" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
-        rel="stylesheet"
-      />
-      <title>Chain App Dev - App Landing Page HTML5 Template</title>
-      {/* Bootstrap core CSS */}
-      <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-      {/*
-
-TemplateMo 570 Chain App Dev
-
-https://templatemo.com/tm-570-chain-app-dev
-
-*/}
-      {/* Additional CSS Files */}
-      <link
-        rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-        crossOrigin="anonymous"
-      />
-      <link rel="stylesheet" href="assets/css/templatemo-chain-app-dev.css" />
-      <link rel="stylesheet" href="assets/css/animated.css" />
-      <link rel="stylesheet" href="assets/css/owl.css" />
-      {/* ***** Preloader Start ***** */}
-      <div id="js-preloader" className="js-preloader">
-        <div className="preloader-inner">
-          <span className="dot" />
-          <div className="dots">
-            <span />
-            <span />
-            <span />
-          </div>
-        </div>
-      </div>
-      {/* ***** Preloader End ***** */}
-      {/* ***** Header Area Start ***** */}
       <header
-        className="header-area header-sticky wow slideInDown"
+        className={`header-area header-sticky wow slideInDown ${
+          isHeaderFixed ? "background-header" : ""
+        }`}
         data-wow-duration="0.75s"
         data-wow-delay="0s"
       >
@@ -62,58 +29,97 @@ https://templatemo.com/tm-570-chain-app-dev
           <div className="row">
             <div className="col-12">
               <nav className="main-nav">
-                {/* ***** Logo Start ***** */}
                 <a href="index.html" className="logo">
                   <img src="assets/images/logo.png" alt="Chain App Dev" />
                 </a>
-                {/* ***** Logo End ***** */}
-                {/* ***** Menu Start ***** */}
-                <ul className="nav">
+                <ul
+                  className="nav"
+                  style={{ display: isMobileMenuOpen ? "block" : "" }}
+                >
                   <li className="scroll-to-section">
-                    <a href="#top" className="active">
+                    <a
+                      href="#top"
+                      className="active"
+                      onClick={(e) => scrollToSection(e, "#top")}
+                    >
                       Home
                     </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="#services">Services</a>
+                    <a
+                      href="#services"
+                      onClick={(e) => scrollToSection(e, "#services")}
+                    >
+                      Services
+                    </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="#about">About</a>
+                    <a
+                      href="#about"
+                      onClick={(e) => scrollToSection(e, "#about")}
+                    >
+                      About
+                    </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="#pricing">Pricing</a>
+                    <a
+                      href="#pricing"
+                      onClick={(e) => scrollToSection(e, "#pricing")}
+                    >
+                      Pricing
+                    </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="#newsletter">Newsletter</a>
+                    <a
+                      href="#newsletter"
+                      onClick={(e) => scrollToSection(e, "#newsletter")}
+                    >
+                      Newsletter
+                    </a>
                   </li>
                   <li>
                     <div className="gradient-button">
-                      <a id="modal_trigger" href="#modal">
+                      <a id="modal_trigger" href="#modal" onClick={openModal}>
                         <i className="fa fa-sign-in-alt" /> Sign In Now
                       </a>
                     </div>
                   </li>
                 </ul>
-                <a className="menu-trigger">
+                <a
+                  className={`menu-trigger ${isMobileMenuOpen ? "active" : ""}`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
                   <span>Menu</span>
                 </a>
-                {/* ***** Menu End ***** */}
               </nav>
             </div>
           </div>
         </div>
       </header>
-      {/* ***** Header Area End ***** */}
-      <div id="modal" className="popupContainer" style={{ display: "none" }}>
+      {isModalOpen && <div className="modal-overlay" onClick={closeModal} />}
+
+      <div
+        id="modal"
+        className="popupContainer"
+        style={{
+          display: isModalOpen ? "block" : "none",
+          zIndex: 99999,
+          position: "fixed",
+        }}
+      >
         <div className="popupHeader">
-          <span className="header_title">Login</span>
-          <span className="modal_close">
+          <span className="header_title">
+            {modalView === "register" ? "Register" : "Login"}
+          </span>
+          <span className="modal_close" onClick={closeModal}>
             <i className="fa fa-times" />
           </span>
         </div>
         <section className="popupBody">
-          {/* Social Login */}
-          <div className="social_login">
+          <div
+            className="social_login"
+            style={{ display: modalView === "social" ? "block" : "none" }}
+          >
             <div className="">
               <a href="#" className="social_box fb">
                 <span className="icon">
@@ -133,20 +139,39 @@ https://templatemo.com/tm-570-chain-app-dev
             </div>
             <div className="action_btns">
               <div className="one_half">
-                <a href="#" id="login_form" className="btn">
+                <a
+                  href="#"
+                  id="login_form"
+                  className="btn"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setModalView("login");
+                  }}
+                >
                   Login
                 </a>
               </div>
               <div className="one_half last">
-                <a href="#" id="register_form" className="btn">
+                <a
+                  href="#"
+                  id="register_form"
+                  className="btn"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setModalView("register");
+                  }}
+                >
                   Sign up
                 </a>
               </div>
             </div>
           </div>
-          {/* Username & Password Login form */}
-          <div className="user_login">
-            <form>
+
+          <div
+            className="user_login"
+            style={{ display: modalView === "login" ? "block" : "none" }}
+          >
+            <div>
               <label>Email / Username</label>
               <input type="text" />
               <br />
@@ -159,7 +184,14 @@ https://templatemo.com/tm-570-chain-app-dev
               </div>
               <div className="action_btns">
                 <div className="one_half">
-                  <a href="#" className="btn back_btn">
+                  <a
+                    href="#"
+                    className="btn back_btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setModalView("social");
+                    }}
+                  >
                     <i className="fa fa-angle-double-left" /> Back
                   </a>
                 </div>
@@ -169,14 +201,17 @@ https://templatemo.com/tm-570-chain-app-dev
                   </a>
                 </div>
               </div>
-            </form>
+            </div>
             <a href="#" className="forgot_password">
               Forgot password?
             </a>
           </div>
-          {/* Register Form */}
-          <div className="user_register">
-            <form>
+
+          <div
+            className="user_register"
+            style={{ display: modalView === "register" ? "block" : "none" }}
+          >
+            <div>
               <label>Full Name</label>
               <input type="text" />
               <br />
@@ -194,7 +229,14 @@ https://templatemo.com/tm-570-chain-app-dev
               </div>
               <div className="action_btns">
                 <div className="one_half">
-                  <a href="#" className="btn back_btn">
+                  <a
+                    href="#"
+                    className="btn back_btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setModalView("social");
+                    }}
+                  >
                     <i className="fa fa-angle-double-left" /> Back
                   </a>
                 </div>
@@ -204,10 +246,11 @@ https://templatemo.com/tm-570-chain-app-dev
                   </a>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </section>
       </div>
+
       <div
         className="main-banner wow fadeIn"
         id="top"
@@ -263,6 +306,7 @@ https://templatemo.com/tm-570-chain-app-dev
           </div>
         </div>
       </div>
+
       <div id="services" className="services section">
         <div className="container">
           <div className="row">
@@ -369,6 +413,7 @@ https://templatemo.com/tm-570-chain-app-dev
           </div>
         </div>
       </div>
+
       <div id="about" className="about-us section">
         <div className="container">
           <div className="row">
@@ -437,6 +482,7 @@ https://templatemo.com/tm-570-chain-app-dev
           </div>
         </div>
       </div>
+
       <div id="clients" className="the-clients">
         <div className="container">
           <div className="row">
@@ -458,7 +504,14 @@ https://templatemo.com/tm-570-chain-app-dev
                   <div className="row">
                     <div className="col-lg-7 align-self-center">
                       <div className="menu">
-                        <div className="first-thumb active">
+                        <div
+                          className={
+                            activeTestimonial === 0
+                              ? "first-thumb active"
+                              : "first-thumb"
+                          }
+                          onClick={() => handleTestimonialClick(0)}
+                        >
                           <div className="thumb">
                             <div className="row">
                               <div className="col-lg-4 col-sm-4 col-12">
@@ -479,7 +532,10 @@ https://templatemo.com/tm-570-chain-app-dev
                             </div>
                           </div>
                         </div>
-                        <div>
+                        <div
+                          className={activeTestimonial === 1 ? "active" : ""}
+                          onClick={() => handleTestimonialClick(1)}
+                        >
                           <div className="thumb">
                             <div className="row">
                               <div className="col-lg-4 col-sm-4 col-12">
@@ -502,7 +558,10 @@ https://templatemo.com/tm-570-chain-app-dev
                             </div>
                           </div>
                         </div>
-                        <div>
+                        <div
+                          className={activeTestimonial === 2 ? "active" : ""}
+                          onClick={() => handleTestimonialClick(2)}
+                        >
                           <div className="thumb">
                             <div className="row">
                               <div className="col-lg-4 col-sm-4 col-12">
@@ -525,7 +584,10 @@ https://templatemo.com/tm-570-chain-app-dev
                             </div>
                           </div>
                         </div>
-                        <div>
+                        <div
+                          className={activeTestimonial === 3 ? "active" : ""}
+                          onClick={() => handleTestimonialClick(3)}
+                        >
                           <div className="thumb">
                             <div className="row">
                               <div className="col-lg-4 col-sm-4 col-12">
@@ -548,7 +610,14 @@ https://templatemo.com/tm-570-chain-app-dev
                             </div>
                           </div>
                         </div>
-                        <div className="last-thumb">
+                        <div
+                          className={
+                            activeTestimonial === 4
+                              ? "last-thumb active"
+                              : "last-thumb"
+                          }
+                          onClick={() => handleTestimonialClick(4)}
+                        >
                           <div className="thumb">
                             <div className="row">
                               <div className="col-lg-4 col-sm-4 col-12">
@@ -575,7 +644,7 @@ https://templatemo.com/tm-570-chain-app-dev
                     </div>
                     <div className="col-lg-5">
                       <ul className="nacc">
-                        <li className="active">
+                        <li className={activeTestimonial === 0 ? "active" : ""}>
                           <div>
                             <div className="thumb">
                               <div className="row">
@@ -583,12 +652,12 @@ https://templatemo.com/tm-570-chain-app-dev
                                   <div className="client-content">
                                     <img src="assets/images/quote.png" alt="" />
                                     <p>
-                                      “Lorem ipsum dolor sit amet, consectetur
+                                      "Lorem ipsum dolor sit amet, consectetur
                                       adpiscing elit, sed do eismod tempor
                                       idunte ut labore et dolore magna aliqua
                                       darwin kengan lorem ipsum dolor sit amet,
                                       consectetur picing elit massive big
-                                      blasta.”
+                                      blasta."
                                     </p>
                                   </div>
                                   <div className="down-content">
@@ -606,7 +675,7 @@ https://templatemo.com/tm-570-chain-app-dev
                             </div>
                           </div>
                         </li>
-                        <li>
+                        <li className={activeTestimonial === 1 ? "active" : ""}>
                           <div>
                             <div className="thumb">
                               <div className="row">
@@ -614,12 +683,12 @@ https://templatemo.com/tm-570-chain-app-dev
                                   <div className="client-content">
                                     <img src="assets/images/quote.png" alt="" />
                                     <p>
-                                      “CTO, Lorem ipsum dolor sit amet,
+                                      "CTO, Lorem ipsum dolor sit amet,
                                       consectetur adpiscing elit, sed do eismod
                                       tempor idunte ut labore et dolore magna
                                       aliqua darwin kengan lorem ipsum dolor sit
                                       amet, consectetur picing elit massive big
-                                      blasta.”
+                                      blasta."
                                     </p>
                                   </div>
                                   <div className="down-content">
@@ -637,7 +706,7 @@ https://templatemo.com/tm-570-chain-app-dev
                             </div>
                           </div>
                         </li>
-                        <li>
+                        <li className={activeTestimonial === 2 ? "active" : ""}>
                           <div>
                             <div className="thumb">
                               <div className="row">
@@ -645,12 +714,12 @@ https://templatemo.com/tm-570-chain-app-dev
                                   <div className="client-content">
                                     <img src="assets/images/quote.png" alt="" />
                                     <p>
-                                      “May, Lorem ipsum dolor sit amet,
+                                      "May, Lorem ipsum dolor sit amet,
                                       consectetur adpiscing elit, sed do eismod
                                       tempor idunte ut labore et dolore magna
                                       aliqua darwin kengan lorem ipsum dolor sit
                                       amet, consectetur picing elit massive big
-                                      blasta.”
+                                      blasta."
                                     </p>
                                   </div>
                                   <div className="down-content">
@@ -668,7 +737,7 @@ https://templatemo.com/tm-570-chain-app-dev
                             </div>
                           </div>
                         </li>
-                        <li>
+                        <li className={activeTestimonial === 3 ? "active" : ""}>
                           <div>
                             <div className="thumb">
                               <div className="row">
@@ -676,12 +745,12 @@ https://templatemo.com/tm-570-chain-app-dev
                                   <div className="client-content">
                                     <img src="assets/images/quote.png" alt="" />
                                     <p>
-                                      “Lorem ipsum dolor sit amet, consectetur
+                                      "Lorem ipsum dolor sit amet, consectetur
                                       adpiscing elit, sed do eismod tempor
                                       idunte ut labore et dolore magna aliqua
                                       darwin kengan lorem ipsum dolor sit amet,
                                       consectetur picing elit massive big
-                                      blasta.”
+                                      blasta."
                                     </p>
                                   </div>
                                   <div className="down-content">
@@ -699,7 +768,7 @@ https://templatemo.com/tm-570-chain-app-dev
                             </div>
                           </div>
                         </li>
-                        <li>
+                        <li className={activeTestimonial === 4 ? "active" : ""}>
                           <div>
                             <div className="thumb">
                               <div className="row">
@@ -707,12 +776,12 @@ https://templatemo.com/tm-570-chain-app-dev
                                   <div className="client-content">
                                     <img src="assets/images/quote.png" alt="" />
                                     <p>
-                                      “Mark, Lorem ipsum dolor sit amet,
+                                      "Mark, Lorem ipsum dolor sit amet,
                                       consectetur adpiscing elit, sed do eismod
                                       tempor idunte ut labore et dolore magna
                                       aliqua darwin kengan lorem ipsum dolor sit
                                       amet, consectetur picing elit massive big
-                                      blasta.”
+                                      blasta."
                                     </p>
                                   </div>
                                   <div className="down-content">
@@ -739,6 +808,7 @@ https://templatemo.com/tm-570-chain-app-dev
           </div>
         </div>
       </div>
+
       <div id="pricing" className="pricing-tables">
         <div className="container">
           <div className="row">
@@ -817,6 +887,7 @@ https://templatemo.com/tm-570-chain-app-dev
           </div>
         </div>
       </div>
+
       <footer id="newsletter">
         <div className="container">
           <div className="row">
@@ -828,7 +899,7 @@ https://templatemo.com/tm-570-chain-app-dev
               </div>
             </div>
             <div className="col-lg-6 offset-lg-3">
-              <form id="search" action="#" method="GET">
+              <div id="search">
                 <div className="row">
                   <div className="col-lg-6 col-sm-6">
                     <fieldset>
@@ -838,7 +909,6 @@ https://templatemo.com/tm-570-chain-app-dev
                         className="email"
                         placeholder="Email Address..."
                         autoComplete="on"
-                        required=""
                       />
                     </fieldset>
                   </div>
@@ -850,7 +920,7 @@ https://templatemo.com/tm-570-chain-app-dev
                     </fieldset>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
           <div className="row">

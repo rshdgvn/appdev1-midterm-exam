@@ -4,6 +4,64 @@ import "./App.css";
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalView, setModalView] = useState("social");
+  const [isHeaderFixed, setIsHeaderFixed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scroll = window.scrollY;
+      const headerTextEl = document.querySelector(".header-text");
+      const headerEl = document.querySelector("header");
+
+      if (headerTextEl && headerEl) {
+        const box = headerTextEl.offsetHeight;
+        const header = headerEl.offsetHeight;
+
+        if (scroll >= box - header) {
+          setIsHeaderFixed(true);
+        } else {
+          setIsHeaderFixed(false);
+        }
+      }
+
+      const scrollPos = window.scrollY;
+      document.querySelectorAll(".nav a").forEach((link) => {
+        const href = link.getAttribute("href");
+        if (href && href.startsWith("#")) {
+          const refElement = document.querySelector(href);
+          if (refElement) {
+            const top = refElement.offsetTop;
+            const height = refElement.offsetHeight;
+            if (top <= scrollPos && top + height > scrollPos) {
+              document
+                .querySelectorAll(".nav ul li a")
+                .forEach((a) => a.classList.remove("active"));
+              link.classList.add("active");
+            }
+          }
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToSection = (e, targetId) => {
+    e.preventDefault();
+    const target = document.querySelector(targetId);
+    if (target) {
+      const width = window.innerWidth;
+      if (width < 991) {
+        setIsMobileMenuOpen(false);
+      }
+      window.scrollTo({
+        top: target.offsetTop + 1,
+        behavior: "smooth",
+      });
+    }
+  };
 
   const openModal = (e) => {
     e.preventDefault();

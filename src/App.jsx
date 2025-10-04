@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
 function App() {
@@ -7,6 +7,9 @@ function App() {
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const ulRef = useRef(null);
+  const itemsRef = useRef([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,6 +76,20 @@ function App() {
     setIsModalOpen(false);
     setModalView("social");
   };
+
+  const handleTestimonialClick = (index) => {
+    setActiveIndex(index);
+    if (ulRef.current && itemsRef.current[index]) {
+      ulRef.current.style.height = itemsRef.current[index].offsetHeight + "px";
+    }
+  };
+
+  useEffect(() => {
+    if (ulRef.current && itemsRef.current[activeIndex]) {
+      ulRef.current.style.height =
+        itemsRef.current[activeIndex].offsetHeight + "px";
+    }
+  }, [activeIndex]);
 
   return (
     <>
